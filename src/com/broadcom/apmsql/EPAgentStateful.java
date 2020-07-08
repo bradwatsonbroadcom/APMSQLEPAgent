@@ -145,9 +145,9 @@ public class EPAgentStateful {
 	}
     
     public static void addMetricsFromJSON(String json) {
-        JSONObject jsonObject = new JSONObject(json);
-        JSONArray ja = (JSONArray) jsonObject.get("rows");
         try {
+            JSONObject jsonObject = new JSONObject(json);
+            JSONArray ja = (JSONArray) jsonObject.get("rows");
             for (int x = 0; x < ja.length(); x++) {
             	//System.out.println(ja.get(x).toString());
             	parseMetric(ja.get(x).toString());
