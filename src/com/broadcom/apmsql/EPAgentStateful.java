@@ -34,6 +34,7 @@ public class EPAgentStateful {
 	private static ArrayList<String> metricNames;
 	private static ArrayList<WilyMetric> metrics;
 	private static long length;
+	private static int timeout;
 	private static boolean debug;
 	private static boolean stateful;
 	private static long delay;
@@ -198,6 +199,11 @@ public class EPAgentStateful {
         } else {
         	retries = 0;
         }
+        if(props.containsKey("apm.api.timeout")) {
+        	timeout = Integer.parseInt(props.getProperty("apm.api.timeout"));
+        } else {
+        	timeout = 0;
+        }
     }
 
 	public static String getJSONResult(String body) {
@@ -214,6 +220,9 @@ public class EPAgentStateful {
             conn.setRequestProperty("Authorization", "Bearer " + token);
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Cache-Control", "no-cache");
+            if(timeout > 0) {
+            	conn.setConnectTimeout(timeout);
+            }
             conn.setDoOutput(true);
             
             OutputStream os = conn.getOutputStream();
