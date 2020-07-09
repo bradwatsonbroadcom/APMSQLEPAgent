@@ -38,6 +38,7 @@ public class EPAgentStateful {
 	private static boolean debug;
 	private static boolean stateful;
 	private static long delay;
+	private static long retryDelay = 0;
 	private static int retries;
 	
 	public static void main(String[] args) throws Exception {
@@ -57,7 +58,7 @@ public class EPAgentStateful {
 			loopQueries(psEpa);
 			printMetrics(psEpa);
 			try {
-				Thread.sleep(delay * 1000);
+				Thread.sleep(delay);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -87,7 +88,9 @@ public class EPAgentStateful {
 			//while(isEmpty(jsonResult) && (x < retries)) {
 			while(x < retries) {
 				try {
-					Thread.sleep(2000);
+					if(retryDelay > 0) {
+						Thread.sleep(retryDelay);
+					}
 					//end = System.currentTimeMillis() + "";
 					//start = (System.currentTimeMillis() - length) + "";
 					jsonResult = getJSONResult(body.replace("{START}", start).replace("{END}", end));
@@ -196,6 +199,7 @@ public class EPAgentStateful {
         }
         if(props.containsKey("apm.api.retry.count")) {
         	retries = Integer.parseInt(props.getProperty("apm.api.retry.count"));
+        	retryDelay = Long.parseLong(props.getProperty("apm.api.retry.delay"));
         } else {
         	retries = 0;
         }
