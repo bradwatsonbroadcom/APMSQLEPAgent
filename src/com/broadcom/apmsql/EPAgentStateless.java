@@ -42,7 +42,8 @@ public class EPAgentStateless {
 	
 	public static void main(String[] args, PrintStream psEpa) throws Exception {
 		debug = false;
-		getProps(args[0]);
+		//getProps(args[0]);
+		getProps("C:/CAWILY/apmsqlpersonal.properties");
 		loopQueries(psEpa);
 		printMetrics(psEpa);
 	}
