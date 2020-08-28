@@ -38,20 +38,13 @@ public class EPAgentStateless {
 	
 	public static void main(String[] args) throws Exception {
 		main(args, System.out);
-		//getProps();
-		//length = 150000;
-		//address = "http://spectrum.forwardinc.biz:8080/spectrum/restful/model/{MODEL}?{ATTRIBUTES}";
-		//token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJzdWIiOiJCV0FUU09OIiwiZHluZXhwIjp0cnVlLCJ0aWQiOjg4OCwianRpIjoiYmZlNjg3ZTMtNzYyNy00MmU0LWFmZjUtNDNiZTViYjRjYzQxIn0.i5JyoS6iAqbEOG8A3cCZP4qZ1tqwpxjbsGbP0XBgHF51idWkBJQEW3bQXuuwK_H_I0ferHEIp0OYTgJbIP0SQA";
-	}
+		}
 	
 	public static void main(String[] args, PrintStream psEpa) throws Exception {
 		debug = false;
 		getProps(args[0]);
 		loopQueries(psEpa);
-		//getProps();
-		//length = 150000;
-		//address = "http://spectrum.forwardinc.biz:8080/spectrum/restful/model/{MODEL}?{ATTRIBUTES}";
-		//token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJzdWIiOiJCV0FUU09OIiwiZHluZXhwIjp0cnVlLCJ0aWQiOjg4OCwianRpIjoiYmZlNjg3ZTMtNzYyNy00MmU0LWFmZjUtNDNiZTViYjRjYzQxIn0.i5JyoS6iAqbEOG8A3cCZP4qZ1tqwpxjbsGbP0XBgHF51idWkBJQEW3bQXuuwK_H_I0ferHEIp0OYTgJbIP0SQA";
+		printMetrics(psEpa);
 	}
 	
 	private static void printMetrics(PrintStream psEpa) {
@@ -68,14 +61,11 @@ public class EPAgentStateless {
 			String body = "{ \"query\" : \"" + query + "\"}";
 			String jsonResult = getJSONResult(body.replace("{START}", start).replace("{END}", end));
 			int x = 1;
-			//while(isEmpty(jsonResult) && (x < retries)) {
 			while(x < retries) {
 				try {
 					if(retryDelay > 0) {
 						Thread.sleep(retryDelay);
 					}
-					//end = System.currentTimeMillis() + "";
-					//start = (System.currentTimeMillis() - length) + "";
 					jsonResult = getJSONResult(body.replace("{START}", start).replace("{END}", end));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -104,7 +94,6 @@ public class EPAgentStateless {
 
 	private static void parseMetric(String row) throws UnsupportedEncodingException, IOException {
 		row = row.replace("[", "").replace("]", "");
-		//System.out.println(row);
 		String[] split = row.split(",");
 		String name = split[1].replace("\"", "") + "|" + split[2].replace("\"", "") + "|" + split[3].replace("\"", "") + "|" + split[5].replace("\"", "");
 		String metric = split[split.length - 1].replace("\"", "");
@@ -128,7 +117,6 @@ public class EPAgentStateless {
 				}
 			}
 		}
-		//WilyMetricReporter.reportMetric(type, name, metric, psEpa);
 	}
     
     public static void addMetricsFromJSON(String json) {
@@ -136,9 +124,7 @@ public class EPAgentStateless {
             JSONObject jsonObject = new JSONObject(json);
             JSONArray ja = (JSONArray) jsonObject.get("rows");
             for (int x = 0; x < ja.length(); x++) {
-            	//System.out.println(ja.get(x).toString());
             	parseMetric(ja.get(x).toString());
-            	//metrics.add(ja.get(x).toString());
             }
         }catch (JSONException e) {
             e.printStackTrace();
@@ -154,7 +140,6 @@ public class EPAgentStateless {
     private static void getProps(String propertiesFile) {
     	queries = new ArrayList<>();
         props = new Properties();
-        //String propertiesFile = System.getProperty("props");
         try {
             props.load(new FileInputStream(propertiesFile));
         } catch (FileNotFoundException ex) {
@@ -220,10 +205,6 @@ public class EPAgentStateless {
             if(debug) {
             	System.out.println("Response code: " + conn.getResponseCode());
             }
-            /*if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP Error code : "
-                        + conn.getResponseCode());
-            }*/
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
             BufferedReader br = new BufferedReader(in);
             String output;
