@@ -38,7 +38,7 @@ public class EPAgentStateless {
 	
 	public static void main(String[] args) throws Exception {
 		main(args, System.out);
-		}
+	}
 	
 	public static void main(String[] args, PrintStream psEpa) throws Exception {
 		debug = false;
